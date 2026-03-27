@@ -102,6 +102,11 @@ async function handleSlashCommand(
   data: InteractionData,
   member?: { user: { username: string } },
 ): Promise<unknown> {
+  // Only handle /clip commands — defer everything else so Discord routes to other handlers (e.g. OpenClaw's /status, /new)
+  if (data.name !== "clip") {
+    return { type: 1 }; // ACK without responding — lets Discord fall through
+  }
+
   // /clip has subcommands, so the first option is the subcommand
   const subcommand = data.options?.[0];
   if (!subcommand) {
